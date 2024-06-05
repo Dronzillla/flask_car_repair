@@ -12,3 +12,8 @@ def index():
 def display_profile(username):
     user = User.query.filter_by(username=username).one()
     return render_template("profile.html", user=user)
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
