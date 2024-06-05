@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Add car page{% endblock %}
+
+{% block content %}
+    <h1>Add New Car </h1>
+    <form method="POST" action="/submit">
+        {{ form.make }}<br>
+        {{ form.model }}<br>
+        {{ form.year }}<br>
+        {{ form.email }}<br>
+        {{ form.submit }}
+    </form>
+{% endblock %}

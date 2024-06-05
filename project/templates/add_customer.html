@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Add customer page{% endblock %}
+
+{% block content %}
+    <h1>Add New Customer </h1>
+    <form method="POST" action="/submit">
+        {{ form.first_name }}<br>
+        {{ form.last_name }}<br>
+        {{ form.email }}<br>
+        {{ form.phone }}<br>
+        {{ form.submit }}
+    </form>
+{% endblock %}

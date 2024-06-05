@@ -9,7 +9,7 @@ class Customer(db.Model):
     last_name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     phone = db.Column(db.String(80), unique=True, nullable=False)
-    cars = db.relationship("Car", back_populates="owner")
+    cars = db.relationship("Car", back_populates="owner", cascade="all, delete-orphan")
 
 
 class Car(db.Model):
@@ -19,7 +19,9 @@ class Car(db.Model):
     make = db.Column(db.String(80), nullable=False)
     model = db.Column(db.String(80), nullable=False)
     year = db.Column(db.Integer, nullable=False)
-    owner_id = db.Column(db.Integer, db.ForeignKey("customer.id"))
+    owner_id = db.Column(
+        db.Integer, db.ForeignKey("customer.id", ondelete="CASCADE"), nullable=False
+    )
     owner = db.relationship("Customer", back_populates="cars")
 
 

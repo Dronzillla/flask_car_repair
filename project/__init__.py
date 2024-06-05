@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app: Flask = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///example.db"
+app.config["SECRET_KEY"] = "your_secret_key"
 db: SQLAlchemy = SQLAlchemy(app)
 
 # Give access to the aplication context for the database operations
