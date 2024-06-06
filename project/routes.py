@@ -29,7 +29,6 @@ def add_customer():
             last_name = form.last_name.data
             email = form.email.data
             phone = form.phone.data
-
             # Try to add new customer
             success = db_create_customer(
                 first_name=first_name, last_name=last_name, email=email, phone=phone
