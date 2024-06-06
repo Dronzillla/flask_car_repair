@@ -1,6 +1,14 @@
 from project import db
 
 
+# Association Table for Many-to-Many Relationship
+post_tag_association = db.Table(
+    "car_service",
+    db.Column("car_id", db.Integer, db.ForeignKey("car.id")),
+    db.Column("service_id", db.Integer, db.ForeignKey("service.id")),
+)
+
+
 class Customer(db.Model):
     __tablename__ = "customer"
 
@@ -28,5 +36,25 @@ class Car(db.Model):
     )
     owner = db.relationship("Customer", back_populates="cars")
 
+    services = db.relationship(
+        "Service", secondary=post_tag_association, back_populates="cars"
+    )
+
     def __str__(self):
         return f"make: {self.make}, model: {self.model}, year: {self.year}, plate: {self.plate}"
+
+
+class Service(db.Model):
+    __tablename__ = "service"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    description = db.Column(db.String(500), nullable=False)
+    cost = db.Column(db.Float(), nullable=False)
+
+    cars = db.relationship(
+        "Car", secondary=post_tag_association, back_populates="services"
+    )
+
+    def __str__(self):
+        return f"name: {self.name} cost: {self.cost} \n description: {self.description}"

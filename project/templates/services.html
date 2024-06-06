@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}About page{% endblock %}
+
+{% block content %}
+    <h1>Services</h1>
+    {% for service in services %}
+        <p>{{ service }}</p>
+    {% endfor %}
+{% endblock %}

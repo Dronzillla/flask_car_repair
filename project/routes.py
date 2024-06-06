@@ -10,6 +10,7 @@ from project.db_operations import (
     db_update_customer,
     db_view_cars,
     db_view_customers,
+    db_view_services,
 )
 
 
@@ -180,3 +181,9 @@ def view_customers():
 def view_cars():
     cars = db_view_cars()
     return render_template("view_cars.html", cars=cars)
+
+
+@app.route("/services")
+def services():
+    services = db_view_services()
+    return render_template("services.html", services=services)

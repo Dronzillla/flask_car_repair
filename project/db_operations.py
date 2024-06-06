@@ -1,5 +1,5 @@
 from project import db
-from project.models import Customer, Car
+from project.models import Customer, Car, Service
 
 
 # Create new customer
@@ -111,3 +111,8 @@ def db_view_customers() -> list[Customer]:
 def db_view_cars() -> list[Car]:
     cars: list[Car] = Car.query.all()
     return cars
+
+
+def db_view_services() -> list[Service]:
+    services: list[Service] = Service.query.all()
+    return services
