@@ -19,6 +19,7 @@ class Car(db.Model):
     make = db.Column(db.String(80), nullable=False)
     model = db.Column(db.String(80), nullable=False)
     year = db.Column(db.Integer, nullable=False)
+    plate = db.Column(db.String(80), unique=True, nullable=False)
     owner_id = db.Column(
         db.Integer, db.ForeignKey("customer.id", ondelete="CASCADE"), nullable=False
     )

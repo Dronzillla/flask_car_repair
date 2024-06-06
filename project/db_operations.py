@@ -33,29 +33,23 @@ def db_create_customer(first_name: str, last_name: str, email: str, phone: str) 
 
 # Check if customer with email exists
 def db_find_customer_by_email(email: str) -> Customer:
-    user = Customer.query.filter_by(email=email).one_or_none()
-    return user
+    customer = Customer.query.filter_by(email=email).one_or_none()
+    return customer
 
 
-def db_create_car(make: str, model: str, year: int, owner_id: int) -> Car:
-    # Check if customer with owner_id exists in database
-    # if db_owner_id_exists(owner_id):
-    car = Car(make=make, model=model, year=year, owner_id=owner_id)
+# Check if customer with owner_id exists in database
+# if db_owner_id_exists(owner_id):
+def db_create_car(make: str, model: str, year: int, plate: str, owner_id: int) -> Car:
+    # Check if car with provided plate exists
+    if db_car_by_plate(plate=plate) is not None:
+        return False  # Car with provided plate already exists, so we should not create a new one
+    # Create new car
+    car = Car(make=make, model=model, year=year, plate=plate, owner_id=owner_id)
     db.session.add(car)
     db.session.commit()
     return car
-    # return None
 
 
-def db_read_owner_id(email: str) -> int:
-    customer = Customer.query.filter_by(email=email).first()
-    if customer:
-        return customer.id
-    return None
-
-
-# def db_owner_id_exists(owner_id: int) -> bool:
-#     customer = Customer.query.filter_by(id=owner_id).first()
-#     if customer:
-#         return True
-#     return False
+def db_car_by_plate(plate: str) -> Car:
+    car = Car.query.filter_by(plate=plate).one_or_none()
+    return car

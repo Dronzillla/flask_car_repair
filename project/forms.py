@@ -49,4 +49,16 @@ class CarForm(FlaskForm):
         validators=[DataRequired(), Email()],
         render_kw={"placeholder": "Owner email"},
     )
+
+    plate = StringField(
+        "Plate",
+        validators=[
+            DataRequired(),
+            Regexp(
+                r"(^[A-Z]{3}\d{3}$)|(^E[A-Z]\d{4}$)", message="Invalid plate number"
+            ),
+        ],
+        render_kw={"placeholder": "Plate"},
+    )
+
     submit = SubmitField("Submit")

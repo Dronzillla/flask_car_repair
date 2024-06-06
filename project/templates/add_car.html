@@ -10,6 +10,12 @@
         {{ form.model }}<br>
         {{ form.year }}<br>
         {{ form.email }}<br>
+        {{ form.plate }}
+            {% if form.plate.errors %}
+                {% for error in form.plate.errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}<br>
         {{ form.submit }}
     </form>
     {% if message %}
