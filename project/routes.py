@@ -1,8 +1,7 @@
 from project import app
 from flask import render_template, request
-from project.models import User
 from project.forms import CustomerForm, CarForm
-from project.db_operations import db_create_customer, db_create_car, db_read_owner_id
+from project.db_operations import db_create_customer, db_read_owner_id, db_create_car
 
 
 @app.route("/")
@@ -10,35 +9,35 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/profile/<username>")
-def display_profile(username):
-    user = User.query.filter_by(username=username).one()
-    return render_template("profile.html", user=user)
-
-
 @app.route("/about")
 def about():
     return render_template("about.html")
 
 
-# A route to add new customer
 @app.route("/add_customer", methods=["GET", "POST"])
 def add_customer():
-    # Create a form
     form = CustomerForm()
     if request.method == "POST":
         if form.validate_on_submit():
-            # Get customer data from the form
             first_name = form.first_name.data
             last_name = form.last_name.data
             email = form.email.data
             phone = form.phone.data
-            # TODO Try to add new customer. Check if email already exist
-            db_create_customer(
+
+            # Try to add new customer
+            success = db_create_customer(
                 first_name=first_name, last_name=last_name, email=email, phone=phone
             )
-        # TODO Write message Customer added successfully.
-        return render_template("add_customer.html", form=form)
+            if success:
+                return render_template(
+                    "add_customer.html", message="Registration successfull.", form=form
+                )
+            else:
+                return render_template(
+                    "add_customer.html",
+                    message="Registration failed. Customer with the following email already exists.",
+                    form=form,
+                )
     # GET request
     return render_template("add_customer.html", form=form)
 
@@ -59,10 +58,16 @@ def add_car():
             owner_id = db_read_owner_id(email=email)
             if owner_id == None:
                 # TODO Write message No car owner exists.
-                return render_template("add_car.html", form=form)
-            # Add car to owner
+                return render_template(
+                    "add_car.html",
+                    form=form,
+                    message="No can owner exists with provided email exist",
+                )
+            # Add car to an owner
             db_create_car(make=make, model=model, year=year, owner_id=owner_id)
             # TODO Write message Car added successfully.
-            return render_template("add_car.html", form=form)
+            return render_template(
+                "add_car.html", form=form, message="Car added successfully"
+            )
     # GET request
     return render_template("add_car.html", form=form)

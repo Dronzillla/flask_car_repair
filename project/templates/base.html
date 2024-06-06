@@ -12,7 +12,8 @@
         <a href="{{ url_for('add_customer') }}">Add customer</a>
         <a href="{{ url_for('add_car') }}">Add car</a>
     </nav>
+    {% block content %}
 
-    {% block content %}{% endblock %}
+    {% endblock %}
 </body>
 </html>

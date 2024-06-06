@@ -8,7 +8,7 @@ class Customer(db.Model):
     first_name = db.Column(db.String(80), nullable=False)
     last_name = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    phone = db.Column(db.String(80), unique=True, nullable=False)
+    phone = db.Column(db.String(80), nullable=False)
     cars = db.relationship("Car", back_populates="owner", cascade="all, delete-orphan")
 
 
@@ -23,11 +23,3 @@ class Car(db.Model):
         db.Integer, db.ForeignKey("customer.id", ondelete="CASCADE"), nullable=False
     )
     owner = db.relationship("Customer", back_populates="cars")
-
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    first_name = db.Column(db.String(80), nullable=True)
-    last_name = db.Column(db.String(80), nullable=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)

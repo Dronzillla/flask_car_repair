@@ -4,11 +4,15 @@
 
 {% block content %}
     <h1>Add New Car </h1>
-    <form method="POST" action="/submit">
+    <form method="POST" action="{{ url_for('add_car') }}">
+        {{ form.csrf_token }}
         {{ form.make }}<br>
         {{ form.model }}<br>
         {{ form.year }}<br>
         {{ form.email }}<br>
         {{ form.submit }}
     </form>
+    {% if message %}
+        {{ message }}
+    {% endif %} 
 {% endblock %}

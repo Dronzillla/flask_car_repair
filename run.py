@@ -1,5 +1,6 @@
 from project import app, db
-from project.models import User
+
+# from project.models import User
 
 
 if __name__ == "__main__":
