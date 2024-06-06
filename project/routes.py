@@ -5,6 +5,9 @@ from project.db_operations import (
     db_create_customer,
     db_create_car,
     db_find_customer_by_email,
+    db_find_car_by_plate,
+    db_update_car,
+    db_update_customer,
 )
 
 
@@ -40,7 +43,7 @@ def add_customer():
             else:
                 return render_template(
                     "add_customer.html",
-                    message="Registration failed. Customer with the following email already exists.",
+                    message="Registration failed. Customer with the following email already exists in database.",
                     form=form,
                 )
     # GET request
@@ -65,7 +68,7 @@ def add_car():
                 return render_template(
                     "add_car.html",
                     form=form,
-                    message="Registration failed. No customer with provided email address exists. ",
+                    message="Registration failed. No customer with provided email address exists in database. ",
                 )
             owner_id = customer.id
             # Try to add a new car
@@ -79,8 +82,87 @@ def add_car():
             else:
                 return render_template(
                     "add_car.html",
-                    message="Registration failed. Car with the following plate number already exists. ",
+                    message="Registration failed. Car with the following plate number already exists in database. ",
                     form=form,
                 )
     # GET request
     return render_template("add_car.html", form=form)
+
+
+@app.route("/update_customer", methods=["GET", "POST"])
+def update_customer():
+    form = CustomerForm()
+    if request.method == "POST":
+        # Get customer data from the form
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        email = form.email.data
+        phone = form.phone.data
+        # Get customer id associated with an email
+        customer = db_find_customer_by_email(email=email)
+        # If no customer exist update fails.
+        if customer == None:
+            return render_template(
+                "update_customer.html",
+                form=form,
+                message="Update failed. No customer with provided email address exists in database. ",
+            )
+        # If customer with provided email exists. Update information.
+        db_update_customer(
+            customer=customer,
+            first_name=first_name,
+            last_name=last_name,
+            phone=phone,
+        )
+        return render_template(
+            "update_customer.html",
+            form=form,
+            message="Update successfull. ",
+        )
+    # GET request
+    return render_template("update_customer.html", form=form)
+
+
+@app.route("/update_car", methods=["GET", "POST"])
+def update_car():
+    form = CarForm()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            # Get car data from the form
+            make = form.make.data
+            model = form.model.data
+            year = form.year.data
+            email = form.email.data
+            plate = form.plate.data
+            # Check for plate number in database
+            car = db_find_car_by_plate(plate)
+            # If plate number exists update car information and write a message
+            if car:
+                # Validate customer email
+                customer = db_find_customer_by_email(email=email)
+                # If customer email is invalid
+                if customer == None:
+                    return render_template(
+                        "update_car.html",
+                        form=form,
+                        message="Update failed. No customer with provided email address exists in database. ",
+                    )
+                # If customer email is valid
+                owner_id = customer.id
+                db_update_car(
+                    car=car, make=make, model=model, year=year, owner_id=owner_id
+                )
+                return render_template(
+                    "update_car.html",
+                    form=form,
+                    message="Update successfull. ",
+                )
+            # If plate does not exist in database, dont update and write message
+            else:
+                return render_template(
+                    "update_car.html",
+                    form=form,
+                    message="Update failed. No such car exists in database. ",
+                )
+    # GET request
+    return render_template("update_car.html", form=form)

@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Add customer page{% endblock %}
+{% block title %}Update customer page{% endblock %}
 
 {% block content %}
-    <h1>Add New Customer </h1>
-    <form method="POST" action="{{ url_for('add_customer') }}">
+    <h1>Update Customer </h1>
+    <form method="POST" action="{{ url_for('update_customer') }}">
         {{ form.csrf_token }}
         {{ form.email }}
         {% if form.email.errors %}

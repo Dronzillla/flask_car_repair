@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Add car page{% endblock %}
+{% block title %}Update car page{% endblock %}
 
 {% block content %}
-    <h1>Add New Car </h1>
-    <form method="POST" action="{{ url_for('add_car') }}">
+    <h1>Update car </h1>
+    <form method="POST" action="{{ url_for('update_car') }}">
         {{ form.csrf_token }}
         {{ form.plate }}
             {% if form.plate.errors %}

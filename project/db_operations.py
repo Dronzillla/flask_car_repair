@@ -64,7 +64,7 @@ def db_create_car(make: str, model: str, year: int, plate: str, owner_id: int) -
     """
 
     # Check if car with provided plate exists
-    if db_car_by_plate(plate=plate) is not None:
+    if db_find_car_by_plate(plate=plate) is not None:
         return False  # Car with provided plate already exists, so we should not create a new one
     # Create new car
     car = Car(make=make, model=model, year=year, plate=plate, owner_id=owner_id)
@@ -73,6 +73,31 @@ def db_create_car(make: str, model: str, year: int, plate: str, owner_id: int) -
     return car
 
 
-def db_car_by_plate(plate: str) -> Car:
+def db_find_car_by_plate(plate: str) -> Car:
+    """Checks for car plate in database based on plate number, which is unique.
+
+    Args:
+        plate (str): Car plate number
+
+    Returns:
+        Car: 'Car' object if car is found in database, 'None' if car doess not exist in database.
+    """
     car = Car.query.filter_by(plate=plate).one_or_none()
     return car
+
+
+def db_update_car(car: Car, make: str, model: str, year: int, owner_id: int) -> None:
+    car.make = make
+    car.model = model
+    car.year = year
+    car.owner_id = owner_id
+    db.session.commit()
+
+
+def db_update_customer(
+    customer: Customer, first_name: str, last_name: str, phone: str
+) -> None:
+    customer.first_name = first_name
+    customer.last_name = last_name
+    customer.phone = phone
+    db.session.commit()
