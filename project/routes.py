@@ -8,6 +8,8 @@ from project.db_operations import (
     db_find_car_by_plate,
     db_update_car,
     db_update_customer,
+    db_view_cars,
+    db_view_customers,
 )
 
 
@@ -166,3 +168,15 @@ def update_car():
                 )
     # GET request
     return render_template("update_car.html", form=form)
+
+
+@app.route("/view_customers")
+def view_customers():
+    customers = db_view_customers()
+    return render_template("view_customers.html", customers=customers)
+
+
+@app.route("/view_cars")
+def view_cars():
+    cars = db_view_cars()
+    return render_template("view_cars.html", cars=cars)

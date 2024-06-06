@@ -11,6 +11,9 @@ class Customer(db.Model):
     phone = db.Column(db.String(80), nullable=False)
     cars = db.relationship("Car", back_populates="owner", cascade="all, delete-orphan")
 
+    def __str__(self):
+        return f"first name: {self.first_name}, last name: {self.last_name}, email: {self.email}, phone: {self.phone}"
+
 
 class Car(db.Model):
     __tablename__ = "car"
@@ -24,3 +27,6 @@ class Car(db.Model):
         db.Integer, db.ForeignKey("customer.id", ondelete="CASCADE"), nullable=False
     )
     owner = db.relationship("Customer", back_populates="cars")
+
+    def __str__(self):
+        return f"make: {self.make}, model: {self.model}, year: {self.year}, plate: {self.plate}"

@@ -101,3 +101,13 @@ def db_update_customer(
     customer.last_name = last_name
     customer.phone = phone
     db.session.commit()
+
+
+def db_view_customers() -> list[Customer]:
+    customers: list[Customer] = Customer.query.all()
+    return customers
+
+
+def db_view_cars() -> list[Car]:
+    cars: list[Car] = Car.query.all()
+    return cars
