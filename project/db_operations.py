@@ -1,5 +1,6 @@
 from project import db
-from project.models import Customer, Car, Service
+from project.models import Customer, Car, Service, car_service_association
+from datetime import datetime
 
 
 # Create new customer
@@ -109,10 +110,47 @@ def db_view_customers() -> list[Customer]:
 
 
 def db_view_cars() -> list[Car]:
-    cars: list[Car] = Car.query.all()
+    cars = Car.query.all()
     return cars
 
 
 def db_view_services() -> list[Service]:
-    services: list[Service] = Service.query.all()
+    services = Service.query.all()
     return services
+
+
+def db_view_service_names() -> list[str]:
+    services = Service.query.all()
+    return [service.name for service in services]
+
+
+def db_check_car_ownership(email, plate):
+    result = (
+        db.session.query(Customer)
+        .join(Car)
+        .filter(Customer.email == email, Car.plate == plate)
+        .first()
+    )
+    return result is not None
+
+
+def db_add_service(
+    car: Car, service: Service, date: datetime.date, time: datetime.time
+) -> None:
+    car_service_association.insert
+    record = car_service_association.insert().values(
+        car_id=car.id,
+        service_id=service.id,
+        date=date,
+        time=time,
+    )
+    db.session.execute(record)
+    db.session.commit()
+
+    # car.services.append(service)
+    # db.session.commit()
+
+
+def db_find_service_by_name(name: str) -> Service:
+    service = Service.query.filter_by(name=name).first()
+    return service

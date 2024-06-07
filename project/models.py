@@ -2,10 +2,12 @@ from project import db
 
 
 # Association Table for Many-to-Many Relationship
-post_tag_association = db.Table(
+car_service_association = db.Table(
     "car_service",
     db.Column("car_id", db.Integer, db.ForeignKey("car.id")),
     db.Column("service_id", db.Integer, db.ForeignKey("service.id")),
+    db.Column("date", db.Date, nullable=False),
+    db.Column("time", db.Time, nullable=False),
 )
 
 
@@ -37,7 +39,7 @@ class Car(db.Model):
     owner = db.relationship("Customer", back_populates="cars")
 
     services = db.relationship(
-        "Service", secondary=post_tag_association, back_populates="cars"
+        "Service", secondary=car_service_association, back_populates="cars"
     )
 
     def __str__(self):
@@ -53,8 +55,8 @@ class Service(db.Model):
     cost = db.Column(db.Float(), nullable=False)
 
     cars = db.relationship(
-        "Car", secondary=post_tag_association, back_populates="services"
+        "Car", secondary=car_service_association, back_populates="services"
     )
 
     def __str__(self):
-        return f"name: {self.name} cost: {self.cost} \n description: {self.description}"
+        return f"name: {self.name}, cost: {self.cost}, description: {self.description}"

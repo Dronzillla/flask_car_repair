@@ -7,4 +7,30 @@
     {% for service in services %}
         <p>{{ service }}</p>
     {% endfor %}
+
+
+    <h1>Book a service</h1>
+    <form method="POST" action="{{ url_for('services') }}">
+        {{ form.csrf_token }}
+        {{ form.email }}
+            {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}<br>
+        {{ form.plate }}
+            {% if form.plate.errors %}
+                {% for error in form.plate.errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}<br>
+        {{ form.date }}<br>
+        {{ form.time }}<br>
+        {{ form.services }}<br>
+        {{ form.submit }}
+    </form>
+    {% if message %}
+        {{ message }}
+    {% endif %} 
+
 {% endblock %}
