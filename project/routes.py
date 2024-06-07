@@ -214,7 +214,7 @@ def services():
                 "services.html",
                 services=all_services,
                 form=form,
-                message="Booking scheduled successfully",
+                message="Booking scheduled successfully. ",
             )
         else:
             return render_template(

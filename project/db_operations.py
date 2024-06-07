@@ -1,5 +1,5 @@
 from project import db
-from project.models import Customer, Car, Service, car_service_association
+from project.models import Customer, Car, Service, CarServiceAssociation
 from datetime import datetime
 
 
@@ -148,17 +148,29 @@ def db_add_service(
     Returns:
         int: Booking id as integer. E.g. 1
     """
-    car_service_association.insert
-    record = car_service_association.insert().values(
+    car_service_association = CarServiceAssociation(
         car_id=car.id,
         service_id=service.id,
         date=date,
         time=time,
     )
-    result = db.session.execute(record)
+    db.session.add(car_service_association)
     db.session.commit()
-    id = result.inserted_primary_key[0]
+
+    id = car_service_association.id
     return id
+
+    # car_service_association.insert
+    # record = car_service_association.insert().values(
+    #     car_id=car.id,
+    #     service_id=service.id,
+    #     date=date,
+    #     time=time,
+    # )
+    # result = db.session.execute(record)
+    # db.session.commit()
+    # id = result.inserted_primary_key[0]
+    # return id
 
 
 def db_find_service_by_name(name: str) -> Service:
