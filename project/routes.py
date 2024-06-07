@@ -209,7 +209,7 @@ def services():
             # Make bookings for each service
             for service_name in service_names:
                 service = db_find_service_by_name(service_name)
-                db_add_service(car=car, service=service, date=date, time=time)
+                id = db_add_service(car=car, service=service, date=date, time=time)
             return render_template(
                 "services.html",
                 services=all_services,

@@ -4,6 +4,7 @@ from project import db
 # Association Table for Many-to-Many Relationship
 car_service_association = db.Table(
     "car_service",
+    db.Column("id", db.Integer, primary_key=True, autoincrement=True),
     db.Column("car_id", db.Integer, db.ForeignKey("car.id")),
     db.Column("service_id", db.Integer, db.ForeignKey("service.id")),
     db.Column("date", db.Date, nullable=False),

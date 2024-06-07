@@ -136,7 +136,18 @@ def db_check_car_ownership(email, plate):
 
 def db_add_service(
     car: Car, service: Service, date: datetime.date, time: datetime.time
-) -> None:
+) -> int:
+    """Creates a booking for a car service and returns booking id in database.
+
+    Args:
+        car (Car): 'Car' object
+        service (Service): 'Service' object
+        date (datetime.date): 'datetime.data' object
+        time (datetime.time): 'datetime.time' object
+
+    Returns:
+        int: Booking id as integer. E.g. 1
+    """
     car_service_association.insert
     record = car_service_association.insert().values(
         car_id=car.id,
@@ -144,11 +155,10 @@ def db_add_service(
         date=date,
         time=time,
     )
-    db.session.execute(record)
+    result = db.session.execute(record)
     db.session.commit()
-
-    # car.services.append(service)
-    # db.session.commit()
+    id = result.inserted_primary_key[0]
+    return id
 
 
 def db_find_service_by_name(name: str) -> Service:
