@@ -1,20 +1,6 @@
 from project import db
 
 
-# Association Model for Many-to-Many Relationships
-class CarServiceAssociation(db.Model):
-    __tablename__ = "car_service"
-
-    id = db.Column(db.Integer, primary_key=True)
-    car_id = db.Column(db.Integer, db.ForeignKey("car.id"))
-    service_id = db.Column(db.Integer, db.ForeignKey("service.id"))
-    date = db.Column(db.Date, nullable=False)
-    time = db.Column(db.Time, nullable=False)
-
-    car = db.relationship("Car", back_populates="car_services")
-    service = db.relationship("Service", back_populates="car_services")
-
-
 class Customer(db.Model):
     __tablename__ = "customer"
 
@@ -62,3 +48,17 @@ class Service(db.Model):
 
     def __str__(self):
         return f"name: {self.name}, cost: {self.cost}, description: {self.description}"
+
+
+# Association Model for Many-to-Many Relationships
+class CarServiceAssociation(db.Model):
+    __tablename__ = "car_service"
+
+    id = db.Column(db.Integer, primary_key=True)
+    car_id = db.Column(db.Integer, db.ForeignKey("car.id"))
+    service_id = db.Column(db.Integer, db.ForeignKey("service.id"))
+    date = db.Column(db.Date, nullable=False)
+    time = db.Column(db.Time, nullable=False)
+
+    car = db.relationship("Car", back_populates="car_services")
+    service = db.relationship("Service", back_populates="car_services")
