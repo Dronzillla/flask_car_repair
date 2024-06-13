@@ -1,6 +1,6 @@
 from project import app
 from flask import render_template, request
-from project.forms import CustomerForm, CarForm, ServiceForm
+from project.forms import CustomerForm, CarForm
 from project.db_operations import (
     db_create_customer,
     db_create_car,
@@ -11,9 +11,6 @@ from project.db_operations import (
     db_view_cars,
     db_view_customers,
     db_view_services,
-    db_check_car_ownership,
-    db_find_service_by_name,
-    db_add_service,
 )
 
 
@@ -186,42 +183,7 @@ def view_cars():
     return render_template("view_cars.html", cars=cars)
 
 
-@app.route("/services", methods=["GET", "POST"])
+@app.route("/services")
 def services():
-    form = ServiceForm()
-    all_services = db_view_services()
-
-    if request.method == "POST":
-        # Get form data
-        email = form.email.data
-        plate = form.plate.data
-        date = form.date.data
-        time = form.time.data
-        service_names = form.services.data
-        ownership_approved = db_check_car_ownership(email=email, plate=plate)
-
-        # print(type(date))
-        # print(type(time))
-
-        if ownership_approved:
-            # # Search for a car
-            car = db_find_car_by_plate(plate=plate)
-            # Make bookings for each service
-            for service_name in service_names:
-                service = db_find_service_by_name(service_name)
-                id = db_add_service(car=car, service=service, date=date, time=time)
-            return render_template(
-                "services.html",
-                services=all_services,
-                form=form,
-                message="Booking scheduled successfully. ",
-            )
-        else:
-            return render_template(
-                "services.html",
-                services=all_services,
-                form=form,
-                message="Booking failed. No car owner with provided car plate number is in the database. ",
-            )
-    # GET request
-    return render_template("services.html", services=all_services, form=form)
+    services = db_view_services()
+    return render_template("services.html", services=services)

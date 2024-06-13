@@ -1,6 +1,5 @@
 from project import db
-from project.models import Customer, Car, Service, CarServiceAssociation
-from datetime import datetime
+from project.models import Customer, Car, Service
 
 
 # Create new customer
@@ -110,69 +109,10 @@ def db_view_customers() -> list[Customer]:
 
 
 def db_view_cars() -> list[Car]:
-    cars = Car.query.all()
+    cars: list[Car] = Car.query.all()
     return cars
 
 
 def db_view_services() -> list[Service]:
-    services = Service.query.all()
+    services: list[Service] = Service.query.all()
     return services
-
-
-def db_view_service_names() -> list[str]:
-    services = Service.query.all()
-    return [service.name for service in services]
-
-
-def db_check_car_ownership(email, plate):
-    result = (
-        db.session.query(Customer)
-        .join(Car)
-        .filter(Customer.email == email, Car.plate == plate)
-        .first()
-    )
-    return result is not None
-
-
-def db_add_service(
-    car: Car, service: Service, date: datetime.date, time: datetime.time
-) -> int:
-    """Creates a booking for a car service and returns booking id in database.
-
-    Args:
-        car (Car): 'Car' object
-        service (Service): 'Service' object
-        date (datetime.date): 'datetime.data' object
-        time (datetime.time): 'datetime.time' object
-
-    Returns:
-        int: Booking id as integer. E.g. 1
-    """
-    car_service_association = CarServiceAssociation(
-        car_id=car.id,
-        service_id=service.id,
-        date=date,
-        time=time,
-    )
-    db.session.add(car_service_association)
-    db.session.commit()
-
-    id = car_service_association.id
-    return id
-
-    # car_service_association.insert
-    # record = car_service_association.insert().values(
-    #     car_id=car.id,
-    #     service_id=service.id,
-    #     date=date,
-    #     time=time,
-    # )
-    # result = db.session.execute(record)
-    # db.session.commit()
-    # id = result.inserted_primary_key[0]
-    # return id
-
-
-def db_find_service_by_name(name: str) -> Service:
-    service = Service.query.filter_by(name=name).first()
-    return service
