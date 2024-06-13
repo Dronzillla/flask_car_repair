@@ -12,7 +12,7 @@ class Customer(db.Model):
     cars = db.relationship("Car", back_populates="owner", cascade="all, delete-orphan")
 
     def __str__(self):
-        return f"first name: {self.first_name}, last name: {self.last_name}, email: {self.email}, phone: {self.phone}"
+        return (f"first name: {self.first_name}, last name: {self.last_name})
 
 
 class Car(db.Model):
@@ -55,10 +55,21 @@ class CarServiceAssociation(db.Model):
     __tablename__ = "car_service"
 
     id = db.Column(db.Integer, primary_key=True)
-    car_id = db.Column(db.Integer, db.ForeignKey("car.id"))
-    service_id = db.Column(db.Integer, db.ForeignKey("service.id"))
+    car_id = db.Column(
+        db.Integer, db.ForeignKey("car.id", ondelete="CASCADE"), nullable=False
+    )
+    service_id = db.Column(
+        db.Integer, db.ForeignKey("service.id", ondelete="CASCADE"), nullable=False
+    )
     date = db.Column(db.Date, nullable=False)
     time = db.Column(db.Time, nullable=False)
 
     car = db.relationship("Car", back_populates="car_services")
     service = db.relationship("Service", back_populates="car_services")
+
+
+#     __table_args__ = (
+#         db.UniqueConstraint(
+#             "car_id", "service_id", "date", "time", name="_car_service_date_time_uc"
+#         ),
+#     )
